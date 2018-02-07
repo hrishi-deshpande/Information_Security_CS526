@@ -1,0 +1,63 @@
+#README for smashing the stack project
+
+#General steps before we start executing exploits
+login as:
+user
+password: user
+
+cd <exploit_directory>
+
+Steps:
+1. make clean
+2. make
+3. su
+4. make setuid
+5. exit #this should return back to the user mode
+
+#Running exploit1
+./exploit1 300 740
+./vulnerable1 $RET
+
+#this opens a shell /bin/sh with root access
+whoami
+exit
+exit
+
+NOTE: please execute "exit" TWICE once to exit from the root shell and then exit from bash which contains
+the environment variable RET
+
+#Running exploit2
+./exploit2 10700 31900
+./vulnerable2 $RET
+
+#this opens a shell /bin/sh with root access
+whoami
+exit
+exit
+
+NOTE: please execute "exit" TWICE once to exit from the root shell and then exit from bash which contains
+the environment variable RET
+
+#Running exploit3
+./exploit3 197 540
+./vulnerable3 $RET
+
+#this opens a shell /bin/sh
+whoami
+exit
+exit
+
+NOTE: please execute "exit" TWICE once to exit from the root shell and then exit from bash which contains the environment variable RET.
+
+#Running exploit4
+./exploit4
+./vulnerable4 exploit4_input
+
+Now run commands  from exploit4_commands
+
+#this opens a shell /bin/sh
+whoami
+exit
+exit
+
+NOTE: please execute "exit" TWICE once to exit from the root shell and then exit from bash which contains the environment variable EGG.
