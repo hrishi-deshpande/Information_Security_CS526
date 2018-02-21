@@ -1,3 +1,4 @@
+#Identify host(s) attempting a directory traversal.
 import pyshark
 
 #Input the trace file

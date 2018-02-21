@@ -1,3 +1,4 @@
+#Identify a list of all HTTP servers.
 import pyshark
 
 #First read the input trace file. We need to obtain those packets that have http as the application protocol
@@ -13,4 +14,4 @@ for packet in input_trace:
 	http_server_set.add(packet.ip.src)
 
 #Next print out the set contents
-print(http_server_set)
+print(sorted(http_server_set))
