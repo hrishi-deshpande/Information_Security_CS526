@@ -42,5 +42,5 @@ versionList = [*server_version]
 versionList.sort(key=cmp_to_key(cmp_versions))
 
 #Print the server(s) with the oldest version which is the first element in the sorted list.
-print(versionList[0], ":", server_version[versionList[0]])
+print("Oldest version:", versionList[0], "HTTP server with this version:", server_version[versionList[0]])
 

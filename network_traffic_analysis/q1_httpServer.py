@@ -14,6 +14,7 @@ for packet in input_trace:
 	http_server_set.add(packet.ip.src)
 
 #Next print out the set contents
+print("List of all HTTP servers that were involved in a valid HTTP response:")
 print(sorted(http_server_set))
 
-print(len(http_server_set))
+print("Total number of such servers:", len(http_server_set))

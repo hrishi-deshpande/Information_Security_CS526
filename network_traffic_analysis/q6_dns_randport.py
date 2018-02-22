@@ -25,6 +25,7 @@ for key in host_ips:
 		suspicious_hosts.add(key)
 		
 #Print the list of suspicious hosts. For the given trace, there are exactly 2 such hosts.
+print("Hosts that use a static UDP port number for DNS queries:")
 print(sorted(suspicious_hosts))
 
 	
