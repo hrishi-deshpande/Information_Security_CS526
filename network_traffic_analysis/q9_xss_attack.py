@@ -18,4 +18,3 @@ for packet in input_trace:
 print(src_ip_set)
 
 
-

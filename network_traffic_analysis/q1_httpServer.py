@@ -15,3 +15,5 @@ for packet in input_trace:
 
 #Next print out the set contents
 print(sorted(http_server_set))
+
+print(len(http_server_set))

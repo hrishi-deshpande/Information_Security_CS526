@@ -13,6 +13,6 @@ src_host = set()
 for packet in input_trace:
 	src_host.add(packet.ip.src)
 	
-print(src_host)
+print(sorted(src_host))
 
 

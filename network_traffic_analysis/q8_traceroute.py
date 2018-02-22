@@ -17,6 +17,7 @@ ip_dict = {}
 for packet in trace_input:
 			   ip_src = packet.ip.src
 			   ip_dst = packet.ip.dst
+			   #Get the IP endpoints for the trace route.
 			   ip_endpoints = (ip_src, ip_dst)
 			   ttl_dict = set()
 			   if ip_endpoints in ip_dict:
@@ -26,8 +27,15 @@ for packet in trace_input:
 					   ttl_dict.add(ttl)
 			   else:
 				   ttl_dict.add(int(packet.ip.ttl))
+                           #Store the ttl value in the dictionary
 			   ip_dict[ip_endpoints] = ttl_dict
-			   
-#Next we print out the dictionary contents. Clearly, there's some host <source_ip, dest_ip> pair with increasing ttl values.
-#So the source_ip is our required source that's attempting a traceroute.
+
+print("Printing the whole structure:")
 print(ip_dict)
+
+#Clearly, there's some host <source_ip, dest_ip> pair with increasing ttl values.
+#So the source_ip is our required source that's attempting a traceroute.
+print("\nMalicious host and its target:")
+for endpoint in ip_dict:
+    if len(ip_dict[endpoint]) > 1:
+        print (endpoint)
