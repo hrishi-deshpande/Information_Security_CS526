@@ -27,9 +27,6 @@ int main(int argc, char **argv) {
 	
 	while(1) {
 
-		//TODO remove this
-		if (count % 1000000 == 0) printf("count = %lu\n", count);
-
 		rVal1 = rand();
 		rVal2 = rand();
 		rVal3 = rand();
@@ -43,10 +40,10 @@ int main(int argc, char **argv) {
 		EVP_DigestFinal_ex(&msgDigest_ctx, hash_value, &hash_len); //Store the final hashed value in array "hash_value"
 		EVP_MD_CTX_cleanup(&msgDigest_ctx);
 
-		//Check if the hashed value has the symbol || (logical OR) from SQL in it.
+		//Check if the hashed value has the sybmol OR (or) which is a logical OR operator in SQL.
 		result = strcasestr(hash_value, "'OR'");
 		
-		//Check if the hashed value has the sybmol OR (or) which is a logical OR operator in SQL.
+		//Check if the hashed value has the symbol || (logical OR) from SQL in it.
 		if (result == NULL) {
 			result = strstr(hash_value, "'||'");
 		}

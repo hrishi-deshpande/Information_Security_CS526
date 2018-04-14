@@ -1,0 +1,14 @@
+#sql_0
+username: victim
+password: '
+
+#sql_1
+username: victim
+password: \'' OR 1 = 1;#
+
+#sql_2
+username: victim
+password: 10855605862850599493767419031610945005
+
+NOTE about running the python server:
+python httpServer.py

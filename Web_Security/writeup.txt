@@ -1,0 +1,68 @@
+Writeup: Better Defense
+
+Team: Anudeep Reddy Dwaram
+      Hrishikesh A Deshpande
+
+***********************************************************************************************************************************
+### SQL Injection prevention
+
+## Prepared Statements (with Parameterized Queries)
+Since we are combining code and data together we could decouple them using prepared statements and bind variables. 
+
+Ex: 
+$dp = new mysql("localhost", "user", "pass", "DB");
+
+For the above sql query you can create do the following
+
+Bind the variables
+$statement = $dp->prepare("select * from User where (name = ? and password =?); ");
+
+The bind variables are typed, you can compile the code before binding the data
+$statement->bind_param("ss", $user, $pass);
+$statement->execute();
+
+## Encrypt sensitive data
+We can use standard signature protocols like blind signatures to sign our login credentials.
+Instead of using  password to md5 in raw format we could use a hex format to prevent re-engineering
+
+## Escaping character sequence
+Instead of using unsafe functions like mysql_real_escape_string(), you could use modern versions mysqli_real_escape_string().
+Avoid using a vulnerable character set for encoding like (utf8)
+
+***********************************************************************************************************************************
+### XSS prevention
+
+One could white list all the valid headers, cookies, query strings agains a rigorous spec of what should be allowed instead of 
+blacklisting (attempting to filter/sanitize)
+
+Since attacker uses normal html tags to inject untrusted data/script in to the body. One could escape characters like (&, >, <, ", ',  ...)
+to prevent execution of malicious script and only use Javascript hex/unicode encoding. 
+
+URL should be validated and input should take canonical form. One need to strictly check all the unsafe attributes like id, name
+etc.
+
+You could use standard signing practices with private and public keys to ensure that script introduce is authentic. This might
+require standardization of internet rules.
+
+Developers of the website should use tools like "XSS Me" to test for XSS vulnerabilities. 
+
+***********************************************************************************************************************************
+### CSRF prevention
+
+# Cookie-to-Header Token
+Instead of validating the cookie and the header given by the user. You can store local copy of the cookie and validate the token 
+against what you have assigned to the user to prevent overwriting of cookie.
+
+# Secret Validation Token
+Associate random token with the current user session
+Tokens are then inserted within the HTML forms and links associated with sensitive server side operations
+Can also randomize CSRF token parameter name and value for each request making it hard to guess
+
+# Custom HTTP Header
+Server checks the presence of XMLHTTPRequest and drops the request if the header isn't found. But his is for same-origin requests
+and doesn't work across domains
+
+# Re-authentication
+OneTime Token - Attacker must know the current token
+
+***********************************************************************************************************************************
