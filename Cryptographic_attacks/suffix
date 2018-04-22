@@ -1,0 +1,11 @@
+
+"""
+from hashlib import sha256 
+
+digest = sha256(blob).hexdigest()
+
+if digest == "db7e5ec6b36c5ad3799e418abb944e197f788819c133ee5b658861a7cd3cc9e5":
+	print "I mean no harm."
+elif digest == "cf3a72098324b7c75d10ef40b754dc4ed55e02bea4479a96a9dee0f43b7aae82":
+	print "You are doomed!"
+

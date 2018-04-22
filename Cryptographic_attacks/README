@@ -1,0 +1,17 @@
+#Running 1.1 length extension attack
+python len_ext_attack.py "http://cs526-s18.cs.purdue.edu/project4/api?token=d6613c382dbb78b5592091e08f6f41fe&user=nadiah&command1=ListSquirrels&command2=NoOp"
+
+
+#Generating files good.py and evil.py
+1. Use the file prefix to generate two files file1 and file2 
+fastcoll -p prefix -o col1 col2
+
+2. Next append the suffix file to col1 to generate good.py and to col2 to generate evil.py respectively.
+cat col1 suffix > good.py
+cat col2 sufix > evil.py
+
+3. Check that the files have same md5 hash values
+openssl dgst -md5 good.py evil.py
+
+4. Verify that the files have different sha256 hash values
+openssl dgst -sha256 good.py evil.py
