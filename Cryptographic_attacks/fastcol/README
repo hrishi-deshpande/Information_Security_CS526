@@ -1,0 +1,10 @@
+#About fastcoll
+fastcoll is a MD5 collision generator by Marc Stevens.
+Usage: 	make
+	./fastcoll -o file1 file2
+
+#Check if the md5 hashes of the file1 and file2 are same
+openssl dgst -md5 file1 file2
+
+#Check that the SHA-256 hashes of file1 and file2 are different
+openssl dgst -sha256 file1 file2

@@ -1,0 +1,46 @@
+Question 1:
+Running time is about: 3.726 seconds
+
+Command output:
+MD5 collision generator v1.5
+by Marc Stevens (http://www.win.tue.nl/hashclash/)
+
+Using output filenames: 'file1' and 'file2'
+Using initial value: 0123456789abcdeffedcba9876543210
+
+Generating first block: .....
+Generating second block: W......
+Running time: 3.72658 s
+
+real	0m5.215s
+user	0m3.726s
+sys	0m0.008s
+
+
+Question 2:
+Contents of file1:
+6472a2e9fa14cd8d3bc2e3d0f71d3dc89d575aaed3026d46ff5d4165e499
+c4ac43acd1cbc86ae6d16702501c9717b20398bc9fecdeec3d8a5676186a
+c88d81e3fbf3953ae7d95187b7e7cd25a8779d9da0531f9718e8fedb06c5
+39464ea54cee4da77e88eb109607ba6f01a28af05a7dd508c82b7fd24382
+f9abc86dd4789f47
+
+Contents of file2:
+6472a2e9fa14cd8d3bc2e3d0f71d3dc89d575a2ed3026d46ff5d4165e499
+c4ac43acd1cbc86ae6d16702501c9797b20398bc9fecdeec3d8a567618ea
+c88d81e3fbf3953ae7d95187b7e7cd25a8779d9da0531f1718e8fedb06c5
+39464ea54cee4da77e88eb109607ba6f01a28a705a7dd508c82b7fd24382
+f9abc8edd4789f47
+
+Question 3:
+MD5 hashes of the two files:
+MD5(file1)= 4e1b3e48783565a2e1d386679e83c98f
+MD5(file2)= 4e1b3e48783565a2e1d386679e83c98f
+
+We can verify that the MD5 hashes of the two files are the same.
+
+Question 4:
+SHA256(file1)= 249d12ac5849cf7bf66823b8f5cd19f9dc79f729cb1d5d9665f9a278663e03fe
+SHA256(file2)= 60477fdd2eff1c00b9877bb4ddc15975dcd4bbaaa21a47e317b97e4ffe1ec703
+
+We can verify that the SHA256 hashes of the two files are different.
